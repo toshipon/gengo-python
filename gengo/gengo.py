@@ -44,6 +44,7 @@ import re
 import copy
 import hmac
 import requests
+import mimetypes
 import sys
 
 from hashlib import sha1
@@ -262,7 +263,8 @@ class Gengo(object):
                 for k, j in jobs.items():
                     if isinstance(j, dict):
                         if j.get('type') == 'file' and 'file_path' in j:
-                            file_data['file_' + k] = open(j['file_path'], 'rb')
+                            mimetype = mimetypes.guess_type(j['file_path'])
+                            file_data['file_' + k] = (j['file_path'], open(j['file_path'], 'rb'), mimetype[0])
                             j['file_key'] = 'file_' + k
                             del j['file_path']
 
